@@ -10,12 +10,12 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/fsnotify/fsnotify"
 	"github.com/arifnurulhakim/go-valet/internal/caddy"
 	"github.com/arifnurulhakim/go-valet/internal/discovery"
 	"github.com/arifnurulhakim/go-valet/internal/registry"
 	"github.com/arifnurulhakim/go-valet/internal/runner"
 	"github.com/arifnurulhakim/go-valet/internal/types"
+	"github.com/fsnotify/fsnotify"
 )
 
 type Daemon struct {
@@ -25,6 +25,12 @@ type Daemon struct {
 }
 
 func Start() {
+	// Fix PATH for Homebrew/Go
+	path := os.Getenv("PATH")
+	home, _ := os.UserHomeDir()
+	newPath := fmt.Sprintf("/opt/homebrew/bin:/usr/local/bin:%s/go/bin:%s", home, path)
+	os.Setenv("PATH", newPath)
+
 	d := &Daemon{
 		processes: make(map[string]*runner.Process),
 	}
