@@ -157,11 +157,12 @@ func main() {
 				return
 			}
 
-			// Table header?
-			fmt.Printf("%-20s %s\n", "Site", "Path")
-			fmt.Printf("%-20s %s\n", "----", "----")
+			// Table header
+			fmt.Printf("%-20s %-30s %s\n", "Site", "URL", "Path")
+			fmt.Printf("%-20s %-30s %s\n", "----", "---", "----")
 			for name, path := range reg.Links {
-				fmt.Printf("%-20s %s\n", name, path)
+				url := fmt.Sprintf("http://%s.test:8080", name)
+				fmt.Printf("%-20s %-30s %s\n", name, url, path)
 			}
 		},
 	}
