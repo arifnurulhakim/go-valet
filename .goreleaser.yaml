@@ -82,5 +82,12 @@ brews:
       - name: air
       - name: caddy
 
+    service: |
+      run [opt_bin/"go-valet", "daemon", "start"]
+      keep_alive true
+      working_dir HOMEBREW_PREFIX
+      log_path var/"log/go-valet.log"
+      error_log_path var/"log/go-valet.error.log"
+
     test: |
       system "#{bin}/go-valet --version"

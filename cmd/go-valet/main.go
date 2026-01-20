@@ -145,7 +145,28 @@ func main() {
 		},
 	}
 
-	rootCmd.AddCommand(parkCmd, unparkCmd, linkCmd, unlinkCmd, daemonCmd, statusCmd)
+	var linksCmd = &cobra.Command{
+		Use:   "links",
+		Short: "List all registered links",
+		Run: func(cmd *cobra.Command, args []string) {
+			reg := registry.New()
+			reg.Load()
+
+			if len(reg.Links) == 0 {
+				fmt.Println("No links registered.")
+				return
+			}
+
+			// Table header?
+			fmt.Printf("%-20s %s\n", "Site", "Path")
+			fmt.Printf("%-20s %s\n", "----", "----")
+			for name, path := range reg.Links {
+				fmt.Printf("%-20s %s\n", name, path)
+			}
+		},
+	}
+
+	rootCmd.AddCommand(parkCmd, unparkCmd, linkCmd, unlinkCmd, linksCmd, daemonCmd, statusCmd)
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
