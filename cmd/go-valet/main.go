@@ -161,7 +161,7 @@ func main() {
 			fmt.Printf("%-20s %-30s %s\n", "Site", "URL", "Path")
 			fmt.Printf("%-20s %-30s %s\n", "----", "---", "----")
 			for name, path := range reg.Links {
-				url := fmt.Sprintf("http://%s.test:8080", name)
+				url := fmt.Sprintf("http://%s.test:9090", name)
 				fmt.Printf("%-20s %-30s %s\n", name, url, path)
 			}
 		},

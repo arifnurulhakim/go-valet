@@ -27,10 +27,10 @@ func GenerateCaddyfile(apps []types.App) error {
 	path := filepath.Join(dir, caddyFileName)
 
 	var sb strings.Builder
-	sb.WriteString("{\n\tauto_https off\n\thttp_port 8080\n}\n\n")
+	sb.WriteString("{\n\tauto_https off\n\thttp_port 9090\n}\n\n")
 
 	for _, app := range apps {
-		sb.WriteString(fmt.Sprintf("http://%s.test:8080 {\n", app.Name))
+		sb.WriteString(fmt.Sprintf("http://%s.test:9090 {\n", app.Name))
 		sb.WriteString(fmt.Sprintf("\treverse_proxy localhost:%d\n", app.Port))
 		sb.WriteString("}\n\n")
 	}
