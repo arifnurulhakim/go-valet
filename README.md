@@ -12,7 +12,12 @@ A Laravel Valet clone for Go.
 ## Installation
 
 ```bash
-git clone https://github.com/hubton/go-valet.git
+# Easy installation via Homebrew
+brew tap arifnurulhakim/tap
+brew install go-valet
+
+# Manual installation
+git clone https://github.com/arifnurulhakim/go-valet.git
 cd go-valet
 go install ./cmd/go-valet
 ```

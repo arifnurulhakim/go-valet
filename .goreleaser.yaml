@@ -1,0 +1,86 @@
+version: 2
+
+project_name: go-valet
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    binary: go-valet
+    ldflags:
+      - -s -w
+
+archives:
+  - format: tar.gz
+    # this name template makes the OS and Arch compatible with the results of uname.
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    # use zip for windows archives
+    format_overrides:
+    - goos: windows
+      format: zip
+
+checksum:
+  name_template: 'checksums.txt'
+
+snapshot:
+  name_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+
+brews:
+  -
+    # Name template of the recipe
+    # Default to project name
+    name: go-valet
+
+    # Repository to push the tap to.
+    repository:
+      owner: arifnurulhakim
+      name: homebrew-tap
+      # token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}" 
+      # We usually use GITHUB_TOKEN if it has permissions, or a specific PAT.
+      # Goreleaser uses GITHUB_TOKEN by default for releases, but for pushing to another repo (tap)
+      # it might need a scoped token. For now, assume standard GITHUB_TOKEN works if scope is right,
+      # or user sets it.
+
+    # Template for the url which is determined by the given Token (github, gitlab or gitea)
+    # Default: https://github.com/<repo_owner>/<repo_name>/releases/download/{{ .Tag }}/{{ .ArtifactName }}
+    url_template: "https://github.com/arifnurulhakim/go-valet/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+
+    # Git author used to commit to the repository.
+    commit_author:
+      name: goreleaserbot
+      email: bot@goreleaser.com
+
+    # The project name and description for the formula.
+    homepage: "https://github.com/arifnurulhakim/go-valet"
+    description: "A Laravel Valet clone for Go"
+    license: "MIT"
+
+    # Dependencies
+    dependencies:
+      - name: air
+      - name: caddy
+
+    test: |
+      system "#{bin}/go-valet --version"
