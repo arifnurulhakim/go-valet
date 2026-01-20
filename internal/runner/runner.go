@@ -26,9 +26,25 @@ func (p *Process) Start() error {
 		return err
 	}
 
-	p.cmd = exec.Command("air")
+	// Try to find air in common locations
+	airPath := "air"
+	if _, err := os.Stat("/opt/homebrew/bin/air"); err == nil {
+		airPath = "/opt/homebrew/bin/air"
+	} else if _, err := os.Stat("/usr/local/bin/air"); err == nil {
+		airPath = "/usr/local/bin/air"
+	}
+	// Also check GOPATH/bin
+	if _, err := os.Stat(filepath.Join(home, "go/bin/air")); err == nil {
+		airPath = filepath.Join(home, "go/bin/air")
+	}
+
+	p.cmd = exec.Command(airPath)
 	p.cmd.Dir = p.App.Path
-	p.cmd.Env = append(os.Environ(), fmt.Sprintf("PORT=%d", p.App.Port))
+	// Inherit environment + PORT + Ensure PATH has common dirs
+	env := os.Environ()
+	newPath := fmt.Sprintf("PATH=%s:/opt/homebrew/bin:/usr/local/bin:%s/go/bin", os.Getenv("PATH"), home)
+	env = append(env, newPath)
+	p.cmd.Env = append(env, fmt.Sprintf("PORT=%d", p.App.Port))
 	p.cmd.Stdout = logFile
 	p.cmd.Stderr = logFile
 	p.cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true} // Set process group so we can kill subtree

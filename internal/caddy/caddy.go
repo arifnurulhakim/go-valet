@@ -58,10 +58,16 @@ func Reload() error {
 
 	// Let's remove `admin off` to allow reloading.
 
-	cmd := exec.Command("caddy", "reload", "--config", path)
+	// Resolve Caddy Path
+	caddyPath := "caddy"
+	if _, err := os.Stat("/opt/homebrew/bin/caddy"); err == nil {
+		caddyPath = "/opt/homebrew/bin/caddy"
+	}
+
+	cmd := exec.Command(caddyPath, "reload", "--config", path)
 	if err := cmd.Run(); err != nil {
 		// If reload fails, maybe it's not running. Try start.
-		cmd = exec.Command("caddy", "start", "--config", path)
+		cmd = exec.Command(caddyPath, "start", "--config", path)
 		return cmd.Run()
 	}
 	return nil
