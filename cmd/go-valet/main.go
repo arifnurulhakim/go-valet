@@ -3,10 +3,12 @@ package main
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 
 	"github.com/arifnurulhakim/go-valet/internal/daemon"
 	"github.com/arifnurulhakim/go-valet/internal/registry"
+	"github.com/arifnurulhakim/go-valet/internal/trust"
 	"github.com/spf13/cobra"
 )
 
@@ -167,7 +169,50 @@ func main() {
 		},
 	}
 
-	rootCmd.AddCommand(parkCmd, unparkCmd, linkCmd, unlinkCmd, linksCmd, daemonCmd, statusCmd)
+	var trustCmd = &cobra.Command{
+		Use:   "trust",
+		Short: "Enable port forwarding (80 -> 9090) to allow clean URLs",
+		Run: func(cmd *cobra.Command, args []string) {
+			if err := trust.Trust(); err != nil {
+				fmt.Printf("Error enabling trust: %v\n", err)
+				os.Exit(1)
+			}
+		},
+	}
+
+	var untrustCmd = &cobra.Command{
+		Use:   "untrust",
+		Short: "Disable port forwarding",
+		Run: func(cmd *cobra.Command, args []string) {
+			if err := trust.Untrust(); err != nil {
+				fmt.Printf("Error disabling trust: %v\n", err)
+				os.Exit(1)
+			}
+		},
+	}
+
+	var restartCmd = &cobra.Command{
+		Use:   "restart",
+		Short: "Restart the daemon",
+		Run: func(cmd *cobra.Command, args []string) {
+			// Stop
+			// We can't easily stop the daemon from here without killing it or sending a signal if we don't have pid.
+			// But since we use 'brew services', maybe we should just say "use brew services restart"?
+			// Or we can try to find the process?
+			// Ideally `daemonStartCmd` should handle "already running" or we act as a client sending signal?
+			// For now, let's keep it simple: instruct user or try `daemon.Restart`?
+			// Let's implement a simple "killall air & go-valet" logic? No that's abrupt.
+			// Let's just invoke brew services if on mac?
+			// Or just tell the user.
+			// But the user *tried* `go-valet restart` and got error.
+			// Let's implement a wrapper.
+
+			fmt.Println("Restarting (via brew services)...")
+			exec.Command("brew", "services", "restart", "go-valet").Run()
+		},
+	}
+
+	rootCmd.AddCommand(parkCmd, unparkCmd, linkCmd, unlinkCmd, linksCmd, daemonCmd, statusCmd, trustCmd, untrustCmd, restartCmd)
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
