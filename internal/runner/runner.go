@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"syscall"
 
-	"github.com/hubton/go-valet/internal/types"
+	"github.com/arifnurulhakim/go-valet/internal/types"
 )
 
 type Process struct {

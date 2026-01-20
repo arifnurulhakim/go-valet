@@ -4,9 +4,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/hubton/go-valet/internal/allocator"
-	"github.com/hubton/go-valet/internal/registry"
-	"github.com/hubton/go-valet/internal/types"
+	"github.com/arifnurulhakim/go-valet/internal/allocator"
+	"github.com/arifnurulhakim/go-valet/internal/registry"
+	"github.com/arifnurulhakim/go-valet/internal/types"
 )
 
 func FindApps(reg *registry.Registry) ([]types.App, error) {

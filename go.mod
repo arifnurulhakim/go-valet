@@ -1,4 +1,4 @@
-module github.com/hubton/go-valet
+module github.com/arifnurulhakim/go-valet
 
 go 1.25.4
 

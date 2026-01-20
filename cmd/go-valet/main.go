@@ -5,8 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/hubton/go-valet/internal/daemon"
-	"github.com/hubton/go-valet/internal/registry"
+	"github.com/arifnurulhakim/go-valet/internal/daemon"
+	"github.com/arifnurulhakim/go-valet/internal/registry"
 	"github.com/spf13/cobra"
 )
 

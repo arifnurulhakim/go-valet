@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/hubton/go-valet/internal/types"
+	"github.com/arifnurulhakim/go-valet/internal/types"
 )
 
 const (

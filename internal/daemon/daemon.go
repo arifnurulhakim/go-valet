@@ -11,11 +11,11 @@ import (
 	"time"
 
 	"github.com/fsnotify/fsnotify"
-	"github.com/hubton/go-valet/internal/caddy"
-	"github.com/hubton/go-valet/internal/discovery"
-	"github.com/hubton/go-valet/internal/registry"
-	"github.com/hubton/go-valet/internal/runner"
-	"github.com/hubton/go-valet/internal/types"
+	"github.com/arifnurulhakim/go-valet/internal/caddy"
+	"github.com/arifnurulhakim/go-valet/internal/discovery"
+	"github.com/arifnurulhakim/go-valet/internal/registry"
+	"github.com/arifnurulhakim/go-valet/internal/runner"
+	"github.com/arifnurulhakim/go-valet/internal/types"
 )
 
 type Daemon struct {
